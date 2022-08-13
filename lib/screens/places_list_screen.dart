@@ -19,22 +19,30 @@ class PlacesList extends StatelessWidget {
               icon: const Icon(Icons.add))
         ],
       ),
-      body: Consumer<UserPlaces>(
-        child: const Center(child: Text('Got no places yet, please add !')),
-        builder: (ctx, places, ch) {
-          if (places.placesList.isEmpty) return ch as Widget;
-          return ListView.builder(
-              itemCount: places.placesList.length,
-              itemBuilder: (ct, i) {
-                return ListTile(
-                  leading: CircleAvatar(
-                      backgroundImage: FileImage(
-                    places.placesList[i].image,
-                  )),
-                  title: Text(places.placesList[i].title),
-                );
-              });
-        },
+      body: FutureBuilder(
+        future:
+            Provider.of<UserPlaces>(context, listen: false).fetchAndSetPlaces(),
+        builder: (ctx, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? const CircularProgressIndicator()
+                : Consumer<UserPlaces>(
+                    child: const Center(
+                        child: Text('Got no places yet, please add !')),
+                    builder: (ctx, places, ch) {
+                      if (places.placesList.isEmpty) return ch as Widget;
+                      return ListView.builder(
+                          itemCount: places.placesList.length,
+                          itemBuilder: (ct, i) {
+                            return ListTile(
+                              leading: CircleAvatar(
+                                  backgroundImage: FileImage(
+                                places.placesList[i].image,
+                              )),
+                              title: Text(places.placesList[i].title),
+                            );
+                          });
+                    },
+                  ),
       ),
     );
   }

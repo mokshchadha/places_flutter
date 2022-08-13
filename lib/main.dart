@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Places',
         theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
+          primarySwatch: Colors.teal,
         ),
         home: PlacesList(),
         routes: {AddPlaceScreen.routeName: (ctx) => AddPlaceScreen()},
